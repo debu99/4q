@@ -23,8 +23,9 @@ resource "github_team" "teams" {
 }
 
 resource "github_team_membership" "members" {
-  count    = "${length(local.members)}"
-  team_id  = "${element(split("|",element(local.members,count.index)),0)}"
-  username = "${element(split("|",element(local.members,count.index)),1)}"
-  role     = "${element(split("|",element(local.members,count.index)),2)}"
+  count      = "${length(local.members)}"
+  team_id    = "${element(split("|",element(local.members,count.index)),0)}"
+  username   = "${element(split("|",element(local.members,count.index)),1)}"
+  role       = "${element(split("|",element(local.members,count.index)),2)}"
+  depends_on = ["github_team.teams"]
 }
