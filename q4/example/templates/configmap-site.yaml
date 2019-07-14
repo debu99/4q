@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  sites.conf: |
+{{- range .Values.hosts }}
+    server {
+        listen {{ $.Values.port | default 80 }};
+        server_name {{ .name }}.{{ $.Values.domain }};
+        location / {
+            add_header Content-Type "text/plain;charset=utf-8";
+            return 200 "{{ .name }}\n";
+        }
+    }
+{{ end -}}

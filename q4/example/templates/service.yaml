@@ -1,0 +1,15 @@
+{{- range .Values.hosts }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+spec:
+  selector:
+    app: {{ .name }}
+  ports:
+    - protocol: TCP
+      name: http
+      port:  {{ $.Values.port | default 80 }}
+      targetPort: {{ $.Values.port | default 80 }}
+{{ end -}}

@@ -1,0 +1,32 @@
+{{- range .Values.hosts }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-deployment-{{ .name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          image: {{ $.Values.image.repository }}:{{ $.Values.image.tag }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ $.Values.port | default 80 }}
+              protocol: TCP   
+          volumeMounts:
+            - name: nginx-site-config
+              mountPath: /etc/nginx/conf.d/sites.conf
+              subPath: sites.conf
+      volumes:
+        - name: nginx-site-config
+          configMap:
+            name: {{ $.Release.Name }}-configmap
+{{ end -}}

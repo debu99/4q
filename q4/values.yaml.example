@@ -1,0 +1,4 @@
+domain: cn.swatrider.com
+hosts:
+- name: foo
+- name: bar

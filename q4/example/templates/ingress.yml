@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  {{- with .Values.ingressAnnotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+  {{- range .Values.hosts }}
+  - host: {{ .name }}.{{ $.Values.domain }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .name }}
+          servicePort: {{ $.Values.port | default 80 }}
+  {{end -}}
+
